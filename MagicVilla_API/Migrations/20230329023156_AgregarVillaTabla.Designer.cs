@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MagicVilla_API.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230312024145_AlimentarTablaVilla")]
-    partial class AlimentarTablaVilla
+    [Migration("20230329023156_AgregarVillaTabla")]
+    partial class AgregarVillaTabla
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,6 +24,31 @@ namespace MagicVilla_API.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("MagicVilla_API.Modelos.NumeroVilla", b =>
+                {
+                    b.Property<int>("VillaNo")
+                        .HasColumnType("int");
+
+                    b.Property<string>("DetalleEspecial")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("FechaActualizacion")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("FechaCreacion")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("VillaId")
+                        .HasColumnType("int");
+
+                    b.HasKey("VillaNo");
+
+                    b.HasIndex("VillaId");
+
+                    b.ToTable("NumeroVillas");
+                });
 
             modelBuilder.Entity("MagicVilla_API.Modelos.Villa", b =>
                 {
@@ -74,8 +99,8 @@ namespace MagicVilla_API.Migrations
                             Id = 1,
                             Amenidad = "",
                             Detalle = "Detalle de la villa...",
-                            FechaActualizacion = new DateTime(2023, 3, 11, 21, 41, 45, 398, DateTimeKind.Local).AddTicks(8679),
-                            FechaCreacion = new DateTime(2023, 3, 11, 21, 41, 45, 398, DateTimeKind.Local).AddTicks(8650),
+                            FechaActualizacion = new DateTime(2023, 3, 28, 21, 31, 56, 248, DateTimeKind.Local).AddTicks(9223),
+                            FechaCreacion = new DateTime(2023, 3, 28, 21, 31, 56, 248, DateTimeKind.Local).AddTicks(9206),
                             ImagenUrl = "",
                             MetrosCuadrados = 50,
                             Nombre = "Villa Real",
@@ -87,14 +112,25 @@ namespace MagicVilla_API.Migrations
                             Id = 2,
                             Amenidad = "",
                             Detalle = "Detalle de la villa...",
-                            FechaActualizacion = new DateTime(2023, 3, 11, 21, 41, 45, 398, DateTimeKind.Local).AddTicks(8685),
-                            FechaCreacion = new DateTime(2023, 3, 11, 21, 41, 45, 398, DateTimeKind.Local).AddTicks(8684),
+                            FechaActualizacion = new DateTime(2023, 3, 28, 21, 31, 56, 248, DateTimeKind.Local).AddTicks(9229),
+                            FechaCreacion = new DateTime(2023, 3, 28, 21, 31, 56, 248, DateTimeKind.Local).AddTicks(9228),
                             ImagenUrl = "",
                             MetrosCuadrados = 40,
                             Nombre = "Premiun",
                             Ocupantes = 4,
                             Tarifa = 150.0
                         });
+                });
+
+            modelBuilder.Entity("MagicVilla_API.Modelos.NumeroVilla", b =>
+                {
+                    b.HasOne("MagicVilla_API.Modelos.Villa", "Villa")
+                        .WithMany()
+                        .HasForeignKey("VillaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Villa");
                 });
 #pragma warning restore 612, 618
         }
